@@ -25,7 +25,11 @@ const Home: React.FC = () => {
     setDrawnCards([...drawnCards, newCard]);
     setCurrentCard(newCard);
 
-    playByText('en-US', `${cardsName[newCard]}`)
+    // playByText('en-US', `${cardsName[newCard]}`)
+    let utterance = new SpeechSynthesisUtterance(`${cardsName[newCard]}`);
+    let voicesArray = speechSynthesis.getVoices();
+    utterance.voice = voicesArray[0];
+    speechSynthesis.speak(utterance);
     
   };
 
@@ -83,39 +87,40 @@ const Home: React.FC = () => {
           priority
         />
       </div>
-      <div className="mt-5 hidden md:block">
-        <ul className="border p-3 rounded grid grid-cols-4 md:grid-cols-12 gap-4 bg-slate-100">
-          {drawnCards.map((card, index) => (
-            <li key={index} className="h-[80px] border rounded-lg shadow-lg flex items-center justify-center flex-shrink-0">
-                <Image
-                  className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] "
-                  src={getImage(cardsName[card])}
-                  alt={cardsName[card]}
-                  width={80}
-                  height={80}
-                  priority
-                />
-              </li>
-          ))}
-        </ul>
-      </div>
-      <div className="mt-5 block md:hidden w-full">
-        <ul className="border p-3 max-w-max bg-slate-100 overflow-x-auto h-[110px] rounded-lg flex pl-2">
-          {drawnCards.map((card, index) => (
-            <li key={index} className="h-[80px] w-[80px] border rounded-lg shadow-lg items-center justify-center flex-shrink-0 mr-2">
-                <Image
-                  className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70]"
-                  src={getImage(cardsName[card])}
-                  alt={cardsName[card]}
-                  width={80}
-                  height={80}
-                  priority
-                />
-              </li>
-          ))}
-        </ul>
-      </div>
-
+      {drawnCards.length > 0 && <>
+        <div className="mt-5 hidden md:block">
+          <ul className="border p-3 rounded grid grid-cols-4 md:grid-cols-12 gap-4 bg-slate-100">
+            {drawnCards.map((card, index) => (
+              <li key={index} className="h-[80px] border rounded-lg shadow-lg flex items-center justify-center flex-shrink-0">
+                  <Image
+                    className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] "
+                    src={getImage(cardsName[card])}
+                    alt={cardsName[card]}
+                    width={80}
+                    height={80}
+                    priority
+                  />
+                </li>
+            ))}
+          </ul>
+        </div>
+        <div className="mt-5 block md:hidden w-full">
+          <ul className="border p-3 max-w-max bg-slate-100 overflow-x-auto h-[110px] rounded-lg flex pl-2">
+            {drawnCards.map((card, index) => (
+              <li key={index} className="h-[80px] w-[80px] border rounded-lg shadow-lg items-center justify-center flex-shrink-0 mr-2">
+                  <Image
+                    className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70]"
+                    src={getImage(cardsName[card])}
+                    alt={cardsName[card]}
+                    width={80}
+                    height={80}
+                    priority
+                  />
+                </li>
+            ))}
+          </ul>
+        </div>
+      </>}
       <div className="mt-5">
         {gameStatus !== "running" && <button onClick={startGame} className="m-2 p-2 bg-green-500 text-white rounded">Start</button>}
         {gameStatus === "running" && <>
