@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image'
 import { cardsName } from './constants';
-import { useSpeechSynthesis } from './hooks';
+// import { useSpeechSynthesis } from './hooks';
 
 const TOTAL_CARDS = 24;
 
@@ -12,7 +12,7 @@ const Home: React.FC = () => {
   const [drawnCards, setDrawnCards] = useState<number[]>([]);
   const [currentCard, setCurrentCard] = useState<number>(25);
   const [gameStatus, setGameStatus] = useState<"idle" | "running" | "paused" | "stopped">("idle");
-  const { playByText } = useSpeechSynthesis();
+  // const { playByText } = useSpeechSynthesis();
   let intervalId: NodeJS.Timeout;
   const drawCard = () => {
     if (drawnCards.length >= TOTAL_CARDS) return;
