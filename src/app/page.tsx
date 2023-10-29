@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image'
 import { cardsName } from './constants';
+import { useSpeechSynthesis } from './hooks';
 
 const TOTAL_CARDS = 24;
 
@@ -11,9 +12,8 @@ const Home: React.FC = () => {
   const [drawnCards, setDrawnCards] = useState<number[]>([]);
   const [currentCard, setCurrentCard] = useState<number>(25);
   const [gameStatus, setGameStatus] = useState<"idle" | "running" | "paused" | "stopped">("idle");
+  const { playByText } = useSpeechSynthesis();
   let intervalId: NodeJS.Timeout;
-
-    
   const drawCard = () => {
     if (drawnCards.length >= TOTAL_CARDS) return;
 
@@ -24,10 +24,9 @@ const Home: React.FC = () => {
 
     setDrawnCards([...drawnCards, newCard]);
     setCurrentCard(newCard);
+
+    playByText('en-US', `${cardsName[newCard]}`)
     
-    // Note: This is a mock, for real audio you'd use some libraries or APIs.
-    const speech = new SpeechSynthesisUtterance(`${cardsName[newCard]}`);
-    window?.speechSynthesis?.speak?.(speech);
   };
 
   const getImage = (name: string) => {
@@ -37,7 +36,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     if (gameStatus === "running") {
-      intervalId = setInterval(drawCard, 12000);
+      intervalId = setInterval(drawCard, 5000);
     } 
     return () => clearInterval(intervalId);
   }, [gameStatus, drawnCards]);
@@ -89,7 +88,7 @@ const Home: React.FC = () => {
           {drawnCards.map((card, index) => (
             <li key={index} className="h-[80px] border rounded-lg shadow-lg flex items-center justify-center flex-shrink-0">
                 <Image
-                  className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] flex-shrink-0"
+                  className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] "
                   src={getImage(cardsName[card])}
                   alt={cardsName[card]}
                   width={80}
