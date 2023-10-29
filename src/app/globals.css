@@ -24,4 +24,10 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+    font-family: 'Comfortaa', sans-serif;
+    /* background-size: 100%;
+    background-position: center center;
+    background-image: url('/krrssna-web-background-halloween.svg');
+    background-color: #000000;
+    background-repeat:no-repeat; */
 }

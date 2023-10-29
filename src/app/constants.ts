@@ -1,0 +1,1 @@
+export const cardsName = ['Jack-o-lantern', 'Bat', 'Spider web', 'Cauldron', 'Broomstick', 'Coffin', 'Zombie', "Witch's hat", 'Owl', 'Witch', 'Spider', 'Black cat', 'Eye', 'Ghost', 'Moon', 'Fangs', 'Vampire', 'Mummy', 'Haunted house', 'Candy', 'Potion', 'Tombstone', 'Candy apple', 'Bones']
