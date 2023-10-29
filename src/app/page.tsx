@@ -37,7 +37,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     if (gameStatus === "running") {
-      intervalId = setInterval(drawCard, 15000);
+      intervalId = setInterval(drawCard, 12000);
     } 
     return () => clearInterval(intervalId);
   }, [gameStatus, drawnCards]);
@@ -72,11 +72,11 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 w-full mx-auto bg-cover bg-center bg-[url('/krrssna-web-background-halloween.svg')] h-[100vh]">
-      <h1 className="text-6xl shadow-lg mb-5 text-[#fff]">Welcome to Halloween Bingo</h1>
+    <div className="flex flex-col items-center justify-start p-8 w-full mx-auto bg-cover bg-center bg-[url('/krrssna-web-background-halloween.svg')] h-[100vh]">
+      <h1 className="text-lg md:text-6xl shadow-lg mb-5 text-[#fff]">Welcome to Halloween Bingo</h1>
       <div className="mt-5 text-2xl flex items-center flex-col bg-slate-100 rounded-lg shadow-xl">
         <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
+          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] rounded-lg"
           src={getImage(cardsName[currentCard])}
           alt={cardsName[currentCard]}
           width={400}
@@ -84,23 +84,39 @@ const Home: React.FC = () => {
           priority
         />
       </div>
-      {drawnCards.length > 0 &&<div className="mt-5">
-            <ul className="border p-3 rounded grid grid-cols-12 gap-4 bg-slate-100">
-                {drawnCards.map((card, index) => (
-                  <li key={index} className="h-[80px] border rounded-lg shadow-lg flex items-center justify-center ">
-                      <Image
-                        className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-                        src={getImage(cardsName[card])}
-                        alt={cardsName[card]}
-                        width={80}
-                        height={80}
-                        priority
-                      />
-                    </li>
-                ))}
-            </ul>
-        </div>
-}
+      <div className="mt-5 hidden md:block">
+        <ul className="border p-3 rounded grid grid-cols-4 md:grid-cols-12 gap-4 bg-slate-100">
+          {drawnCards.map((card, index) => (
+            <li key={index} className="h-[80px] border rounded-lg shadow-lg flex items-center justify-center flex-shrink-0">
+                <Image
+                  className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] flex-shrink-0"
+                  src={getImage(cardsName[card])}
+                  alt={cardsName[card]}
+                  width={80}
+                  height={80}
+                  priority
+                />
+              </li>
+          ))}
+        </ul>
+      </div>
+      <div className="mt-5 block md:hidden w-full">
+        <ul className="border p-3 max-w-max bg-slate-100 overflow-x-auto h-[110px] rounded-lg flex pl-2">
+          {drawnCards.map((card, index) => (
+            <li key={index} className="h-[80px] w-[80px] border rounded-lg shadow-lg items-center justify-center flex-shrink-0 mr-2">
+                <Image
+                  className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70]"
+                  src={getImage(cardsName[card])}
+                  alt={cardsName[card]}
+                  width={80}
+                  height={80}
+                  priority
+                />
+              </li>
+          ))}
+        </ul>
+      </div>
+
       <div className="mt-5">
         {gameStatus !== "running" && <button onClick={startGame} className="m-2 p-2 bg-green-500 text-white rounded">Start</button>}
         {gameStatus === "running" && <>
