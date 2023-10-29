@@ -11,8 +11,8 @@ const comfortaa = Comfortaa({
  
 
 export const metadata: Metadata = {
-  title: 'krrssnå.com',
-  description: 'One-stop digital destination for all things web-based Bingo!',
+  title: 'Halloween Bingo',
+  description: 'Halloween Bingo!',
 }
 
 export default function RootLayout({
