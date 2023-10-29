@@ -40,7 +40,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     if (gameStatus === "running") {
-      intervalId = setInterval(drawCard, 15000);
+      intervalId = setInterval(drawCard, 12000);
     } 
     return () => clearInterval(intervalId);
   }, [gameStatus, drawnCards]);
