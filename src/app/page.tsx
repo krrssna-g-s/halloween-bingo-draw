@@ -102,10 +102,12 @@ const Home: React.FC = () => {
         </div>
 }
       <div className="mt-5">
-        <button onClick={startGame} className="m-2 p-2 bg-green-500 text-white rounded">Start</button>
-        <button onClick={pauseGame} className="m-2 p-2 bg-yellow-500 text-white rounded">Pause</button>
-        <button onClick={stopGame} className="m-2 p-2 bg-red-500 text-white rounded">Stop</button>
-        <button onClick={restartGame} className="m-2 p-2 bg-blue-500 text-white rounded">Restart</button>
+        {gameStatus !== "running" && <button onClick={startGame} className="m-2 p-2 bg-green-500 text-white rounded">Start</button>}
+        {gameStatus === "running" && <>
+          <button onClick={pauseGame} className="m-2 p-2 bg-yellow-500 text-white rounded">Pause</button>
+          <button onClick={stopGame} className="m-2 p-2 bg-red-500 text-white rounded">Stop</button>
+          <button onClick={restartGame} className="m-2 p-2 bg-blue-500 text-white rounded">Restart</button>
+        </>}
       </div>
 
     </div>
