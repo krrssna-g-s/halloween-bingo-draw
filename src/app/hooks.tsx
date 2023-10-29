@@ -39,7 +39,7 @@ const useSpeechSynthesis = () => {
     utterance.voice = localVoices[0];
     utterance.pitch = 1;
     utterance.rate = 1;
-    utterance.voiceURI = 'native';
+    // utterance.voiceURI = 'native';
     utterance.volume = 1;
     utterance.rate = 1;
     utterance.pitch = 0.8;
