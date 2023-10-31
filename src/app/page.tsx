@@ -87,6 +87,11 @@ const Home: React.FC = () => {
           priority
         />
       </div>
+      {drawnCards.length === 0 && <>
+        <div className="my-5 bg-white text-base p-6 rounded">
+          Looking for game sheet <a href="/BINGO.pdf" className="underline text-blue-500 font-bold" download="BINGO">Download & Print</a>
+        </div>
+      </>}
       {drawnCards.length > 0 && <>
         <div className="mt-5 hidden md:block">
           <ul className="border p-3 rounded grid grid-cols-4 md:grid-cols-12 gap-4 bg-slate-100">
