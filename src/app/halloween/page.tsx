@@ -1,108 +1,142 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+"use client"
+
+import { useState, useEffect } from 'react';
 import Image from 'next/image'
+import { cardsName } from '../constants';
+import { useSpeechSynthesis } from '../hooks';
 
-export default function Home() {
+const TOTAL_CARDS = 24;
+
+const Home: React.FC = () => {
+  const [drawnCards, setDrawnCards] = useState<number[]>([]);
+  const [currentCard, setCurrentCard] = useState<number>(25);
+  const [gameStatus, setGameStatus] = useState<"idle" | "running" | "paused" | "stopped">("idle");
+  const { playByText } = useSpeechSynthesis();
+  let intervalId: NodeJS.Timeout;
+  const drawCard = () => {
+    if (drawnCards.length >= TOTAL_CARDS) return;
+
+    let newCard: number;
+    do {
+      newCard = Math.floor(Math.random() * TOTAL_CARDS);
+    } while (drawnCards.includes(newCard));
+
+    setDrawnCards([...drawnCards, newCard]);
+    setCurrentCard(newCard);
+
+    playByText('en-US', `${cardsName[newCard]}`)
+    // let utterance = new SpeechSynthesisUtterance(`${cardsName[newCard]}`);
+    // let voicesArray = speechSynthesis.getVoices();
+    // utterance.voice = voicesArray[0];
+    // speechSynthesis.speak(utterance);
+    
+  };
+
+  const getImage = (name: string) => {
+    if(!name) return '/images/trickortreat.svg'
+    return `/images/${name?.replace(' ', '')?.toLowerCase()}.png`
+  }
+
+  useEffect(() => {
+    if (gameStatus === "running") {
+      intervalId = setInterval(drawCard, 12000);
+    } 
+    return () => clearInterval(intervalId);
+  }, [gameStatus, drawnCards]);
+
+  const startGame = () => {
+    setGameStatus("running");
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    }
+  };
+
+  const stopGame = () => {
+    clearInterval(intervalId);
+    setDrawnCards([]);
+    setCurrentCard(25);
+    setGameStatus("stopped");
+    if (document.exitFullscreen) {
+      document.exitFullscreen(); 
+    }
+  };
+
+  const pauseGame = () => {
+    clearInterval(intervalId);
+    setGameStatus("paused");
+  };
+
+  const restartGame = () => {
+    clearInterval(intervalId);
+    setDrawnCards([]);
+    setCurrentCard(25);
+    setGameStatus("running");
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-6  mx-auto">
-      <div className="z-10 w-full items-center justify-between font-mono text-sm lg:flex max-w-6xl py-3">
-        
-        <div className="fixed bottom-0 left-0 flex h-10 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-2 lg:pointer-events-auto lg:p-0"
-            href="https://krrssna.com"
-          >
-            
-            <Image
-              src="/logo.svg"
-              alt="krrssna.com"
-              className="dark:invert"
-              width={80}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
+    <div className="flex flex-col items-center justify-start p-8 w-full mx-auto bg-cover bg-center bg-[url('/krrssna-web-background-halloween.svg')] h-[100vh]">
+      <h1 className="text-lg md:text-6xl shadow-lg mb-5 text-[#fff]">Welcome to Halloween Bingo</h1>
+      <div className="mt-5 text-2xl flex items-center flex-col bg-slate-100 rounded-lg shadow-xl">
         <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/krrssna-web-background-halloween.svg"
-          alt="Next.js Logo"
-          width={1200}
-          height={300}
+          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] rounded-lg"
+          src={getImage(cardsName[currentCard])}
+          alt={cardsName[currentCard]}
+          width={400}
+          height={400}
           priority
         />
       </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      {drawnCards.length === 0 && <>
+        <div className="my-5 bg-white text-base p-6 rounded">
+          Looking for game sheet <a href="/BINGO.pdf" className="underline text-blue-500 font-bold" download="BINGO">Download & Print</a>
+        </div>
+      </>}
+      {drawnCards.length > 0 && <>
+        <div className="mt-5 hidden md:block">
+          <ul className="border p-3 rounded grid grid-cols-4 md:grid-cols-12 gap-4 bg-slate-100">
+            {drawnCards.map((card, index) => (
+              <li key={index} className="h-[80px] border rounded-lg shadow-lg flex items-center justify-center flex-shrink-0">
+                  <Image
+                    className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] "
+                    src={getImage(cardsName[card])}
+                    alt={cardsName[card]}
+                    width={80}
+                    height={80}
+                    priority
+                  />
+                </li>
+            ))}
+          </ul>
+        </div>
+        <div className="mt-5 block md:hidden w-full">
+          <ul className="border p-3 max-w-max bg-slate-100 overflow-x-auto h-[110px] rounded-lg flex pl-2">
+            {drawnCards.map((card, index) => (
+              <li key={index} className="h-[80px] w-[80px] border rounded-lg shadow-lg items-center justify-center flex-shrink-0 mr-2">
+                  <Image
+                    className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70]"
+                    src={getImage(cardsName[card])}
+                    alt={cardsName[card]}
+                    width={80}
+                    height={80}
+                    priority
+                  />
+                </li>
+            ))}
+          </ul>
+        </div>
+      </>}
+      <div className="mt-5">
+        {gameStatus !== "running" && <button onClick={startGame} className="m-2 p-2 bg-green-500 text-white rounded">Start</button>}
+        {gameStatus === "running" && <>
+          <button onClick={pauseGame} className="m-2 p-2 bg-yellow-500 text-white rounded">Pause</button>
+          <button onClick={stopGame} className="m-2 p-2 bg-red-500 text-white rounded">Stop</button>
+          <button onClick={restartGame} className="m-2 p-2 bg-blue-500 text-white rounded">Restart</button>
+        </>}
       </div>
-    </main>
-  )
+
+    </div>
+  );
 }
+
+export default Home;
