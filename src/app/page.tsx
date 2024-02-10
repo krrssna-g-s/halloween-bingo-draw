@@ -6,11 +6,11 @@ import Image from 'next/image'
 import { cardsNameVal } from './constants';
 import { useSpeechSynthesis } from './hooks';
 
-const TOTAL_CARDS = 24;
+const TOTAL_CARDS = 25;
 
 const Home: React.FC = () => {
   const [drawnCards, setDrawnCards] = useState<number[]>([]);
-  const [currentCard, setCurrentCard] = useState<number>(25);
+  const [currentCard, setCurrentCard] = useState<number>(26);
   const [gameStatus, setGameStatus] = useState<"idle" | "running" | "paused" | "stopped">("idle");
   const { playByText } = useSpeechSynthesis();
   let intervalId: NodeJS.Timeout;
@@ -55,7 +55,7 @@ const Home: React.FC = () => {
   const stopGame = () => {
     clearInterval(intervalId);
     setDrawnCards([]);
-    setCurrentCard(25);
+    setCurrentCard(26);
     setGameStatus("stopped");
     if (document.exitFullscreen) {
       document.exitFullscreen(); 
@@ -70,7 +70,7 @@ const Home: React.FC = () => {
   const restartGame = () => {
     clearInterval(intervalId);
     setDrawnCards([]);
-    setCurrentCard(25);
+    setCurrentCard(26);
     setGameStatus("running");
   };
 
@@ -95,13 +95,13 @@ const Home: React.FC = () => {
         <div className="mt-5 hidden md:block">
           <ul className="border p-3 rounded grid grid-cols-4 md:grid-cols-12 gap-4 bg-slate-100">
             {drawnCards.map((card, index) => (
-              <li key={index} className="h-[80px] border rounded-lg shadow-lg flex items-center justify-center flex-shrink-0">
+              <li key={index} className="h-[120px] w-[120px] border rounded-lg shadow-lg flex items-center justify-center flex-shrink-0">
                   <Image
                     className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] "
                     src={getImage(cardsNameVal[card])}
                     alt={cardsNameVal[card]}
-                    width={80}
-                    height={80}
+                    width={120}
+                    height={120}
                     priority
                   />
                 </li>
@@ -109,15 +109,15 @@ const Home: React.FC = () => {
           </ul>
         </div>
         <div className="mt-5 block md:hidden w-full">
-          <ul className="border p-3 max-w-max bg-slate-100 overflow-x-auto h-[110px] rounded-lg flex pl-2">
+          <ul className="border p-3 max-w-max bg-slate-100 overflow-x-auto h-[130px] rounded-lg flex pl-2">
             {drawnCards.map((card, index) => (
-              <li key={index} className="h-[80px] w-[80px] border rounded-lg shadow-lg items-center justify-center flex-shrink-0 mr-2">
+              <li key={index} className="h-[120px] w-[120px] border rounded-lg shadow-lg items-center justify-center flex-shrink-0 mr-2">
                   <Image
                     className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70]"
                     src={getImage(cardsNameVal[card])}
                     alt={cardsNameVal[card]}
-                    width={80}
-                    height={80}
+                    width={120}
+                    height={120}
                     priority
                   />
                 </li>
